@@ -49,16 +49,18 @@ if check_password():
         Restituisci il risultato pronto per copia/incolla in Excel.
         """
 
-        response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
-            messages=[
-                {"role": "system", "content": "Sei un assistente esperto di estrazione tabelle da PDF."},
-                {"role": "user", "content": prompt},
-                {"role": "user", "content": f"PDF base64: {base64_pdf}"}
-            ],
-            max_tokens=2000,
-            temperature=0.2,
-        )
+     client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+response = client.chat.completions.create(
+    model="gpt-4-turbo",
+    messages=[
+        {"role": "system", "content": "Sei un assistente esperto di estrazione tabelle da PDF."},
+        {"role": "user", "content": prompt},
+        {"role": "user", "content": f"PDF base64: {base64_pdf}"}
+    ],
+    max_tokens=2000,
+    temperature=0.2,
+)
 
         tabella_estratta = response["choices"][0]["message"]["content"]
 
